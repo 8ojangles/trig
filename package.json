@@ -3,13 +3,8 @@
   "version": "1.0.0",
   "description": "Starter project - gulp - sass/scss - babel",
   "main": "index.js",
-  "scripts": {
-    "test": "mocha"
-  },
-  "keywords": [
-    "Elucidat",
-    "test"
-  ],
+  "scripts": {},
+  "keywords": [],
   "author": "Simon Papanicolaou",
   "license": "ISC",
   "devDependencies": {

@@ -196,4 +196,4 @@ exports.tests = tests;
 
 
 // build task
-exports.build = gulp.series( gulp.series( clean ),  gulp.parallel( vendorJs, compileJs, compileHtml, moveHtml, moveData, sass ), tests );
+exports.build = gulp.series( gulp.series( clean ),  gulp.parallel( vendorJs, compileJs, compileHtml, moveHtml, moveData, sass ) );
