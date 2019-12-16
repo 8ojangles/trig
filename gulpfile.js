@@ -14,13 +14,7 @@ const babelify = require( 'babelify' );
 const browserify = require( 'browserify' );
 const browserSync = require( 'browser-sync' ).create();
 const log = require( 'fancy-log' );
-const nunjucksRender = require('gulp-nunjucks-render');
-const concat = require( 'gulp-concat' );
-const scss = require( 'gulp-dart-sass' );
 const sourcemaps = require( 'gulp-sourcemaps' );
-const cssnano = require( 'cssnano' );
-const postcss = require("gulp-postcss");
-const autoprefixer = require("autoprefixer");
 const uglify = require( 'gulp-uglify' );
 const buffer = require( 'vinyl-buffer' );
 const source = require( 'vinyl-source-stream' );
@@ -29,125 +23,19 @@ const mocha = require('gulp-mocha');
 
 // directories
 const dirs = require( './gulp/dirs' ).dirs;
+const clean = require( './gulp/cleanDirs' ).clean;
+const compileHtml = require( './gulp/compileHtml' ).compileHtml;
+const moveHtml = require( './gulp/moveHtml' ).moveHtml;
+
+const compileJs = require( './gulp/compileJs' ).compileJs;
+
+const vendorJs = require( './gulp/vendorJs' ).vendorJs;
+
+const moveData = require( './gulp/moveData' ).moveData;
+
+const sass = require( './gulp/sass' ).sass;
 
 
-
-// TASKS
-
-// clean dist folders
-function clean(){
-	return (
-		del( [ dirs.distDir ] )
-	);
-};
-
-// expose task to cli	
-exports.clean = clean;
-
-
-// browserify js
-
-function compileJs(){
-	return (
-		browserify({
-    		entries: dirs.src.jsBundleEntry,
-    		debug: true
-  		})
-		.bundle()
-		.on( 'error', err => {
-			log.error( "Browserify js compile error:" + err.message )
-		})
-		.pipe( source( 'scripts.js' ) )
-		// .pipe( buffer() )
-		// .pipe( uglify() )
-		// .pipe( sourcemaps.init( { loadMaps: true } ) )
-		// .pipe( sourcemaps.write( './maps') )
-		.pipe( gulp.dest( dirs.dist.js ) )
-	);
-};
-
-// expose task to cli	
-exports.compileJs = compileJs;
-
-
-
-// compile templates (nunjucks)
-function compileHtml(){
-	return (
-		gulp
-			.src( dirs.src.templates )
-			.pipe( nunjucksRender( {
-	      		path: 'src/templates/'
-		    } ) )
-		    .pipe( gulp.dest( dirs.dist.html ) )
-	);
-};
-
-// expose task to cli	
-exports.compileHtml = compileHtml;
-
-
-
-// move html
-function moveHtml(){
-	return (
-		gulp
-			.src( `${ dirs.srcDir }/*.html` )
-			.pipe( gulp.dest( dirs.dist.html ) )
-			.on( "end", function() { log.info( 'html moved' ) } )
-	);
-};
-
-// expose task to cli	
-exports.moveHtml = moveHtml;
-
-
-// concatenate vendor libraries
-function vendorJs(){
-	return (
-		gulp
-			.src( dirs.vendorLibs )
-			.pipe( concat( 'vendor.js' ) )
-    		.pipe( gulp.dest( dirs.dist.js ) )
-	);
-}
-
-// expose task to cli	
-exports.vendorJs = vendorJs;
-
-
-// compile scss
-function sass(){
-	return (
-        gulp
-	        .src( dirs.src.scss )
-	        .pipe( scss() )
-	        .on( "error", scss.logError )
-	        // Use postcss with autoprefixer and compress the compiled file using cssnano
-            .pipe( postcss( [ autoprefixer(), cssnano() ] ) )
-            // Now add/write the sourcemaps
-            .pipe( sourcemaps.write() )
-	        .pipe( gulp.dest( dirs.dist.css ) )
-	        .pipe( browserSync.stream() )
-    );
-}
-
-// expose task to cli	
-exports.scss = scss;
-
-
-
-// move data
-function moveData(){
-	return (
-		gulp
-			.src( dirs.src.data )
-    		.pipe( gulp.dest( dirs.dist.data ) )
-	);
-}
-
-// expose task to cli	
-exports.moveData = moveData;
 
 
 
@@ -171,7 +59,7 @@ function watch(){
     });
     browserSync.reload();
 
-    gulp.watch( dirs.src.scss , sass );
+    gulp.watch( dirs.src.scss , gulp.series( sass, browserSync.stream() ) );
     gulp.watch( dirs.src.js, gulp.series( compileJs, reload ) );
     gulp.watch( dirs.src.templates, gulp.series( compileHtml, reload ) );
 }
