@@ -10,6 +10,8 @@
 ////////////////////////////////////////////////////
 
 const gulp = require( 'gulp' );
+const plumber = require('gulp-plumber');
+const notify = require('gulp-notify');
 const babelify = require( 'babelify' );
 const browserify = require( 'browserify' );
 const browserSync = require( 'browser-sync' ).create();
@@ -47,6 +49,12 @@ function reload( done ) {
     done();
 }
 
+function watchFiles() {
+	gulp.watch( dirs.src.scss , sass );
+    gulp.watch( dirs.src.js, gulp.series( compileJs, reload ) );
+    gulp.watch( dirs.src.templates, gulp.series( compileHtml, reload ) );
+}
+
 // browsersync file watcher
 function watch(){
 	browserSync.init({
@@ -65,10 +73,7 @@ function watch(){
         // proxy: "yourlocal.dev"
     });
     browserSync.reload();
-
-    gulp.watch( dirs.src.scss , sass );
-    gulp.watch( dirs.src.js, gulp.series( compileJs, reload ) );
-    gulp.watch( dirs.src.templates, gulp.series( compileHtml, reload ) );
+    watchFiles();
 }
     
 // expose task to cli
