@@ -42,6 +42,19 @@ const sass = require( './gulp/sass' ).sass;
 const moveData = require( './gulp/moveData' ).moveData;
 
 
+// If you are already serving your website locally using something like apache
+// You can use the proxy setting to proxy that instead
+// proxy: "yourlocal.dev"
+let bsOpts = {
+	open: false,
+    server: {
+        baseDir: "./dist/"
+    },
+    port: 4000,
+    ui: {
+		port: 4001
+	}
+}
 
 // browsersync reload function
 function reload( done ) {
@@ -57,23 +70,19 @@ function watchFiles() {
 
 // browsersync file watcher
 function watch(){
-	browserSync.init({
-        // You can tell browserSync to use this directory and serve it as a mini-server
-        open: false,
-        server: {
-            baseDir: "./dist/",
+	browserSync.emitter.on(
+    	'init',
+    	function(){
+    		notify( {message: "Localhost started "} );
+    		console.log( "Localhost started" );
+    	}
+    );
 
-        },
-        port: 4000,
-        ui: {
-    		port: 4001
-  		},
-        // If you are already serving your website locally using something like apache
-        // You can use the proxy setting to proxy that instead
-        // proxy: "yourlocal.dev"
-    });
+	browserSync.init( bsOpts );
     browserSync.reload();
+    
     watchFiles();
+
 }
     
 // expose task to cli

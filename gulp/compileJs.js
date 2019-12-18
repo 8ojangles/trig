@@ -3,6 +3,7 @@ const log = require( 'fancy-log' );
 const browserify = require( 'browserify' );
 const source = require( 'vinyl-source-stream' );
 const plumbError = require( '../gulp/errorReporting' ).plumbError;
+const notify = require('gulp-notify');
 const dirs = require( '../gulp/dirs' ).dirs;
 
 // browserify js
