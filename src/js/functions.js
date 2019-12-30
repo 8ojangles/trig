@@ -15,7 +15,7 @@ let trig = {};
 /**
 * @description convert degrees to radians.
 * @param {number} degrees - the degree value to convert.
-* @returns {number} result.
+* @returns {number} radians.
 */
 function degreesToRadians( degrees ) {
 	return degrees * pi180;
@@ -24,7 +24,7 @@ function degreesToRadians( degrees ) {
 /**
 * @description convert radians to degrees.
 * @param {number} radians - the degree value to convert.
-* @returns {number} result.
+* @returns {number} degrees.
 */
 function radiansToDegrees( radians ) {
 	return radians * pi180Rev;
