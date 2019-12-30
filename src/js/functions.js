@@ -1,4 +1,8 @@
 const trigConstants = require( './constants.js' );
+/**
+* cache PI values
+*/
+const pi = Math.PI;
 const pi180 = trigConstants.pi180;
 const pi180Rev = trigConstants.pi180Rev;
 
@@ -28,12 +32,12 @@ function radiansToDegrees( radians ) {
 
 /**
 * @description get length of opposite leg of triangle given the angle and adjactent leg length
-* @param {number} angle - the angle of the triangle.
+* @param {number} radians - the value of the angle in radians.
 * @param {number} adjacentLength - the length of the adjacent leg.
 * @returns {number} result.
 */
-function getOppositeLength( angle, adjacentLength ) {
-	return Math.sin( angle ) * adjacentLength;
+function getOppositeLength( radians, adjacentLength ) {
+	return Math.sin( radians ) * adjacentLength;
 }
 
 /**
@@ -78,16 +82,16 @@ function dist( x1, y1, x2, y2 ) {
 * @description Calculate new coordinates given origin, angle and distance.
 * @param {number} x - X coordinate of origin.
 * @param {number} y - Y coordinate of origin.
-* @param {number} angle - radians.
+* @param {number} radians - the value of the angle in radians.
 * @param {number} distance - distance.
 * @returns {object} resultant x/y coordinates.
 * @returns {number} new x coordinate.
 * @returns {number} new y coordinate.
 */
-function findNewPoint( x, y, angle, distance ) {
+function findNewPoint( x, y, radians, distance ) {
 	return {
-		x: Math.cos(angle) * distance + x,
-		y: Math.sin(angle) * distance + y
+		x: Math.cos( radians ) * distance + x,
+		y: Math.sin( radians ) * distance + y
 	};
 }
 
@@ -95,17 +99,17 @@ function findNewPoint( x, y, angle, distance ) {
 * @description Calculate velocity vector given origin, angle and inpulse.
 * @param {number} x - X coordinate of origin.
 * @param {number} y - Y coordinate of origin.
-* @param {number} angle - radians.
+* @param {number} radians - the value of the angle in radians.
 * @param {number} inpulse - velocity of impulse.
 * @returns {object} resultant x/y velocity vector.
 * @returns {number} new x velocity vector.
 * @returns {number} new y velocity vector.
 */
-function calculateVelocities( x, y, angle, impulse ) {
-	var a2 = Math.atan2(Math.sin(angle) * impulse + y - y, Math.cos(angle) * impulse + x - x);
+function calculateVelocities( x, y, radians, impulse ) {
+	var a2 = Math.atan2( Math.sin( radians ) * impulse + y - y, Math.cos( radians ) * impulse + x - x );
 	return {
-		xVel: Math.cos(a2) * impulse,
-		yVel: Math.sin(a2) * impulse
+		xVel: Math.cos( a2 ) * impulse,
+		yVel: Math.sin( a2 ) * impulse
 	};
 }
 
