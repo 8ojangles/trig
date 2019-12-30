@@ -1,8 +1,3 @@
 // app functions
-const fN = require( './functions.js' ).fN;
-
-
-$( document ).ready( function(){
-	$( body ).append( '<p>Hello World</p>' );
-
-} );
+const trigConstants = require( './constants.js' );
+const trig = require( './functions.js' );
